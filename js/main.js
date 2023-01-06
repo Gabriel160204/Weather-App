@@ -1,4 +1,4 @@
-import WHEATER_API_KEY from './apiKey.js';
+import WHEATER_API_KEY from './apiKey.js'
 
 class City {
 	name;
@@ -45,7 +45,7 @@ const search = async (city) => {
 		});
 
 	// Get wheater info from latitude and lontitude
-	await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lon}&appid=${apiKey}&units=metric`)
+	await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lon}&appid=${WHEATER_API_KEY}&units=metric`)
 		.then((response) => response.json())
 		.then((data) => {			city.wheater.temp = data.main.temp;
 			city.wheater.feels_like = data.main.feels_like;
