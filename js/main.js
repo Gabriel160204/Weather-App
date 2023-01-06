@@ -59,6 +59,7 @@ const search = async (city) => {
 // Initial city
 let initial_city = new City();
 initial_city.name = 'London';
+search(initial_city);
 
 const input = document.querySelector('#input');
 let timer;
