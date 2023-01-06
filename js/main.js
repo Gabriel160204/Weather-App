@@ -1,4 +1,4 @@
-import WHEATER_API_KEY from './apiKey.js'
+import WHEATER_API_KEY from './apiKey.js';
 
 class City {
 	name;
