@@ -1,7 +1,8 @@
-import WHEATER_API_KEY from './apiKey.js';
+import { WHEATER_API_KEY, PEXELS_API_KEY } from './apiKey.js';
 
 class City {
 	name;
+	img_url;
 	coords = {
 		lat: 0,
 		lon: 0
@@ -11,16 +12,31 @@ class City {
 		feels_like: 0,
 		temp_min: 0,
 		temp_max: 0,
-		base: ''
+		description: '',
+		pressure: 0,
+		humidity: 0,
+		sea_level: 0,
+		grnd_level: 0,
+		
+		wind: {
+			speed: 0,
+			deg: 0,
+			gust: 0
+		}
+	};
+	photographer = {
+		name: '',
+		url: ''
 	};
 }
 
 const main_html = document.querySelector('#main');
+const img_bg = document.querySelector('#img_bg');
 const convert_city_to_html = (city) => {
 	main_html.innerHTML = `
 		<section>
 
-			<h1 id="main_weather">${city.wheater.base}</h1>
+			<h1 id="main_weather">${city.wheater.description}</h1>
 
 			<div>
 				<span id="temp">Temp: ${city.wheater.temp}ºC</span>
@@ -31,6 +47,7 @@ const convert_city_to_html = (city) => {
 
 		</section>
 	`;
+	img_bg.style.backgroundImage = `url('${city.img_url}')`;
 };
 
 // Search function
@@ -47,12 +64,30 @@ const search = async (city) => {
 	// Get wheater info from latitude and lontitude
 	await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lon}&appid=${WHEATER_API_KEY}&units=metric`)
 		.then((response) => response.json())
-		.then((data) => {			city.wheater.temp = data.main.temp;
+		.then((data) => {
+			city.wheater.temp = data.main.temp;
 			city.wheater.feels_like = data.main.feels_like;
 			city.wheater.temp_min = data.main.temp_min;
 			city.wheater.temp_max = data.main.temp_max;
-			city.wheater.base = data.base;
+			city.wheater.description = data.weather[0].description;
 		});
+
+	// Get city image and photographer info
+	const photos_count = 15; // Max 80
+	const random_photo = Math.floor(Math.random() * photos_count + 1);
+	await fetch(`https://api.pexels.com/v1/search?query=${city.name}&per_page=${photos_count}`, {
+		method: 'GET',
+		headers: { 
+			Accept: 'application/json',
+			Authorization: PEXELS_API_KEY
+		}
+	})
+	.then((response) => response.json())
+	.then((data) => {
+		city.img_url = data.photos[random_photo].src.large2x;
+		city.photographer.name = data.photos[random_photo].photographer;
+		city.photographer.url = data.photos[random_photo].photographer_url;
+	});
 	console.log(city);
 	convert_city_to_html(city);
 };

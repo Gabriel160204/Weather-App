@@ -1,7 +1,10 @@
 body {
-	background-image: url("../assets/blur_sky.jpg");
-	object-fit: cover;
 	color: #fff;
+}
+
+#img_bg {
+	padding-top: 1px;
+	height: 100vh;
 }
 
 #title {
@@ -16,14 +19,19 @@ input {
 	margin-right: auto;
 	margin-left: auto;
 	margin-top: 5rem;
-	border-radius: 10px;
-	border: 1.5px solid transparent;
-
+	
 	text-align: center;
-	font-size: 1.2rem;
+	font-size: 1.5rem;
 
 	width: 50%;
 	height: 2rem;
+
+	/* From https://css.glass */
+	background: rgba(255, 255, 255, 0.3);
+	border-radius: 10px;
+	box-shadow: 0 4px 50px black;
+	backdrop-filter: blur(0.1px);
+	border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 main section h1 {
