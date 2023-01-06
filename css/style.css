@@ -1,0 +1,45 @@
+body {
+	background-image: url("../assets/blur_sky.jpg");
+	object-fit: cover;
+	color: #fff;
+}
+
+#title {
+	color: #fff;
+	text-align: center;
+	font-size: 5.5vh;
+	padding-top: 1rem;
+}
+
+input {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 5rem;
+	border-radius: 10px;
+	border: 1.5px solid transparent;
+
+	text-align: center;
+	font-size: 1.2rem;
+
+	width: 50%;
+	height: 2rem;
+}
+
+main section h1 {
+	text-align: center;
+}
+
+main section div {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 4.5rem;
+	justify-content: center;
+	margin: auto;
+	width: 80%;
+}
+
+main section div span {
+	font-size: 1.3rem;
+	text-align: center;
+}
