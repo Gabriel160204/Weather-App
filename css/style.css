@@ -1,17 +1,14 @@
 body {
+	background-color: #323232;
 	color: #fff;
 	font-family: 'Roboto', sans-serif;
-}
-
-#img_bg {
-	padding-top: 1px;
-	height: 100vh;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+	height: 100vh;
 }
 
-#title {
+h1 {
 	color: #fff;
 	text-align: center;
 	font-size: 5.5vh;
@@ -38,11 +35,11 @@ input {
 	border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
-main section h1 {
+main h1 {
 	text-align: center;
 }
 
-main section div {
+main div {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 4.5rem;
@@ -51,7 +48,7 @@ main section div {
 	width: 80%;
 }
 
-main section div span {
+main div span {
 	font-size: 1.3rem;
 	text-align: center;
 }
