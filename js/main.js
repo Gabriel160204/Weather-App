@@ -1,39 +1,8 @@
-import { WHEATER_API_KEY, PEXELS_API_KEY } from './apiKey.js';
+import { WEATHER_API_KEY, PEXELS_API_KEY } from "./apiKey.js";
+import { WheaterApi } from "./weather-api.js";
 
-class City {
-	name;
-	img_url;
-	coords = {
-		lat: 0,
-		lon: 0
-	};
-	wheater = {
-		temp: 0,
-		feels_like: 0,
-		temp_min: 0,
-		temp_max: 0,
-		description: '',
-		pressure: 0,
-		humidity: 0,
-		sea_level: 0,
-		grnd_level: 0,
-		
-		wind: {
-			speed: 0,
-			deg: 0,
-			gust: 0
-		}
-	};
-	photographer = {
-		name: '',
-		url: ''
-	};
-}
-
-const main_html = document.querySelector('#main');
-const img_bg = document.querySelector('#img_bg');
-const convert_city_to_html = (city) => {
-	main_html.innerHTML = `
+const convertCityToHTML = (city) => {
+	return `
 		<section>
 
 			<h1 id="main_weather">${city.wheater.description}</h1>
@@ -47,84 +16,32 @@ const convert_city_to_html = (city) => {
 
 		</section>
 	`;
-	img_bg.style.backgroundImage = `url('${city.img_url}')`;
 };
 
-// Search function
-const search = async (city) => {
-	
-	// Get latitude and lontitude of city by name
-	await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city.name}&appid=${WHEATER_API_KEY}`)
-		.then((response) => response.json())
-		.then((data) => {
-			city.coords.lat = data[0].lat;
-			city.coords.lon = data[0].lon;
-		});
-
-	// Get wheater info from latitude and lontitude
-	await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lon}&appid=${WHEATER_API_KEY}&units=metric`)
-		.then((response) => response.json())
-		.then((data) => {
-			city.wheater.temp = data.main.temp;
-			city.wheater.feels_like = data.main.feels_like;
-			city.wheater.temp_min = data.main.temp_min;
-			city.wheater.temp_max = data.main.temp_max;
-			city.wheater.description = data.weather[0].description;
-		});
-
-	// Get city image and photographer info
-	let color;
-	const temp = city.wheater.temp;
-	if (temp >= 30) {
-		color = "red";
-	} else if (temp >= 25) {
-		color = "orange";
-	}  else if (temp >= 20) {
-		color = "green";
-	}  else if (temp >= 15) {
-		color = "blue";
-	}  else if (temp >= 10) {
-		color = "gray";
-	}  else if (temp >= 5) {
-		color = "white";
-	} 
-	const photos_count = 15; // Max 80
-	const random_photo = Math.floor(Math.random() * photos_count);
-	await fetch(`https://api.pexels.com/v1/search?query=${city.name}&per_page=${photos_count}&color=${color}`, {
-		method: 'GET',
-		headers: { 
-			Accept: 'application/json',
-			Authorization: PEXELS_API_KEY
+const GetCityWeather = async (city_name) => {
+	WheaterApi.search(city_name, WEATHER_API_KEY, PEXELS_API_KEY)
+		.then((city) => {
+			document.body.style.backgroundImage = `url('${city.img_url}')`;
+			document.getElementsByTagName('main')[0].innerHTML = convertCityToHTML (city);
 		}
-	})
-	.then((response) => response.json())
-	.then((data) => {
-		city.img_url = data.photos[random_photo].src.large2x;
-		city.photographer.name = data.photos[random_photo].photographer;
-		city.photographer.url = data.photos[random_photo].photographer_url;
-	});
-	console.log(city);
-	convert_city_to_html(city);
-};
-// Initial city
-let initial_city = new City();
-initial_city.name = 'London';
-search(initial_city);
+	);
+}
 
-const input = document.querySelector('#input');
+// Input
 let timer;
 const waitTime = 750; // wait time for make HTTP Request when user stop typing
-input.addEventListener('keyup', (e) => {
+document.getElementsByTagName('input')[0].addEventListener('keyup', (e) => {
 
-	// Get current city name
-	let city = new City();
-	city.name = e.currentTarget.value;
+	let city_name = e.currentTarget.value;
 
 	// Clear timer
 	clearTimeout(timer);
 
-	// Wait for X ms and then process the request
+	// Wait for ${waitTime}, then process the request
 	timer = setTimeout(() => {
-		search(city);
+		GetCityWeather(city_name);
 	}, waitTime);
 })
+
+// Initial city
+GetCityWeather('London');
