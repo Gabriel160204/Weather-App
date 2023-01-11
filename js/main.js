@@ -73,9 +73,24 @@ const search = async (city) => {
 		});
 
 	// Get city image and photographer info
+	let color;
+	const temp = city.wheater.temp;
+	if (temp >= 30) {
+		color = "red";
+	} else if (temp >= 25) {
+		color = "orange";
+	}  else if (temp >= 20) {
+		color = "green";
+	}  else if (temp >= 15) {
+		color = "blue";
+	}  else if (temp >= 10) {
+		color = "gray";
+	}  else if (temp >= 5) {
+		color = "white";
+	} 
 	const photos_count = 15; // Max 80
-	const random_photo = Math.floor(Math.random() * photos_count + 1);
-	await fetch(`https://api.pexels.com/v1/search?query=${city.name}&per_page=${photos_count}`, {
+	const random_photo = Math.floor(Math.random() * photos_count);
+	await fetch(`https://api.pexels.com/v1/search?query=${city.name}&per_page=${photos_count}&color=${color}`, {
 		method: 'GET',
 		headers: { 
 			Accept: 'application/json',
