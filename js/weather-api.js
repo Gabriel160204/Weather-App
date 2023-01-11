@@ -1,6 +1,7 @@
 import { City } from "./city-model.js";
 
 export const WheaterApi = {
+
 	async search(city_name, WEATHER_API_KEY, PEXELS_API_KEY) {
 
 		let city = new City();
@@ -27,27 +28,10 @@ export const WheaterApi = {
 			})
 			.catch(err => console.log("Get weather request error: " + err));
 
-		// search photo by color temp
-		let color;
-		const temp = city.wheater.temp;
-		if (temp >= 30) {
-			color = "red";
-		} else if (temp >= 25) {
-			color = "orange";
-		}  else if (temp >= 20) {
-			color = "green";
-		}  else if (temp >= 15) {
-			color = "blue";
-		}  else if (temp >= 10) {
-			color = "gray";
-		}  else if (temp > 5 || temp < 5) {
-			color = "white";
-		} 
-
 		// Get city image and photographer info
 		const total_phtotos_search = 15; // Max 80
 		const random_photo = Math.floor(Math.random() * total_phtotos_search);
-		await fetch(`https://api.pexels.com/v1/search?query=${city.name}&per_page=${total_phtotos_search}&color=${color}`, {
+		await fetch(`https://api.pexels.com/v1/search?query=${city.name} ${city.wheater.description}&per_page=${total_phtotos_search}`, {
 			method: 'GET',
 			headers: { 
 				Accept: 'application/json',
